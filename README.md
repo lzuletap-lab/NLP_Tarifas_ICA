@@ -122,3 +122,5 @@ independiente ni permiten generalizar a otros documentos.
 - Falta evaluar otros formatos y la calidad de las descripciones.
 - Las métricas anteriores evalúan extracción; no validan los
   clasificadores exploratorios de los notebooks originales.
+
+  #Chatbot RAG para Consulta de Tarifas del Impuesto ICA
