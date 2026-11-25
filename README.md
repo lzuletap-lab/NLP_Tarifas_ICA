@@ -122,16 +122,3 @@ independiente ni permiten generalizar a otros documentos.
 - Falta evaluar otros formatos y la calidad de las descripciones.
 - Las métricas anteriores evalúan extracción; no validan los
   clasificadores exploratorios de los notebooks originales.
-
-
-# Chatbot RAG para Consulta de Tarifas del Impuesto ICA
-
-# 🤖 Chatbot RAG para Consulta de Tarifas del Impuesto ICA
-
-**Arquitectura independiente del extractor de PDFs:**
-1. Cargar o genera la tabla estructurada de tarifas ICA (`Municipio`, `CIIU`, `Actividad`, `Tarifa`).
-2. Se exporta la base normalizada en formato `.csv`.
-3. Indexar los registros con embeddings locales (`all-MiniLM-L6-v2`) en **FAISS**.
-4. Ejecuta un **workflow híbrido** (búsqueda exacta por CIIU/municipio + búsqueda semántica RAG).
-5. Genera respuestas con **TinyLlama-1.1B-Chat** y expone un chat web con **Gradio**.
-6. GPU T4.
