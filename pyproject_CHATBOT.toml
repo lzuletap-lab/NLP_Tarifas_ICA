@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "chatbot-ica-rag"
+version = "0.1.0"
+description = "Chatbot RAG híbrido (FAISS + LangChain + TinyLlama + Gradio) para consulta de tarifas del impuesto ICA."
+authors = ["Francy Julieth Buitrago Ramirez", "Laura Zuleta Puerta", "Ivon Steadily Gomez Garcia"]
+readme = "README_CHATBOT.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+pandas = "^2.2.0"
+torch = "^2.2.0"
+transformers = "^4.40.0"
+accelerate = "^0.30.0"
+sentencepiece = "^0.2.0"
+sentence-transformers = "^2.7.0"
+faiss-cpu = "^1.8.0"
+langchain = "^0.2.0"
+langchain-core = "^0.2.0"
+langchain-community = "^0.2.0"
+langchain-huggingface = "^0.0.3"
+gradio = "^4.30.0"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.0"
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
