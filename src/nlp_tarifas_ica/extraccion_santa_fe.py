@@ -29,7 +29,36 @@ def extraer_tabla_santa_fe(
         for numero in numeros:
             pagina = pdf.pages[numero - 1]
 
-            for tabla in pagina.extract_tables():
+            # Completa filas iniciales con borde superior abierto.
+            bordes_adicionales = []
+            for detectada in pagina.find_tables():
+                izquierda, arriba, derecha, _ = detectada.bbox
+                verticales = [
+                    borde for borde in pagina.edges
+                    if borde["orientation"] == "v"
+                    and izquierda - 3 <= borde["x0"] <= derecha + 3
+                    and borde["top"] < arriba - 3
+                    and borde["bottom"] >= arriba - 3
+                ]
+                if not verticales:
+                    continue
+
+                techo = min(borde["top"] for borde in verticales)
+                bordes_adicionales.append({
+                    "object_type": "line",
+                    "x0": izquierda,
+                    "x1": derecha,
+                    "top": techo,
+                    "bottom": techo,
+                    "width": derecha - izquierda,
+                    "height": 0,
+                })
+
+            ajustes = (
+                {"explicit_horizontal_lines": bordes_adicionales}
+                if bordes_adicionales else {}
+            )
+            for tabla in pagina.extract_tables(ajustes):
                 for fila in tabla:
                     if len(fila) != 3:
                         continue
