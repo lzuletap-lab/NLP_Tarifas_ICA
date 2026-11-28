@@ -112,3 +112,15 @@ Comando:
 - Muestra seleccionada y referencias pendientes de revisión humana.
 - El caso 2022 no pertenece a estos ocho y mantiene un recorte conocido.
 - El método experimental aún no sustituye al extractor principal.
+
+## Diagnóstico experimental sobre los 439 candidatos
+- Se generaron 318 propuestas con integridad no verificada.
+- En 121 casos no se identificó un bloque único.
+- El extractor actual devuelve 70 descripciones vacías.
+- El método experimental propone texto para 12 de esas 70.
+- Quedan 58 descripciones originalmente vacías sin propuesta.
+- Ninguna propuesta es más corta que la descripción original.
+- La longitud no demuestra integridad: el caso 2022 sigue recortado.
+- Estos resultados miden cobertura y alertas, no exactitud.
+- No se sustituyeron descripciones del extractor principal.
+- Detalle local: data/processed/diagnostico_descripciones_lote.json.
