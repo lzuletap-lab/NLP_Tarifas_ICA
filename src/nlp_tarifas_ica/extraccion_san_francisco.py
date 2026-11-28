@@ -38,7 +38,7 @@ def extraer_tabla_san_francisco(
                 limpia = linea.strip()
                 titulo = re.sub(r"[^A-Z]", "", limpia.upper())
 
-                if titulo.startswith("ACTIVIDAD"):
+                if titulo.startswith("ACTIVIDAD") and not inicio.match(limpia):
                     if actual:
                         registros.append(actual)
                         actual = None
