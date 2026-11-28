@@ -2,7 +2,7 @@
 
 ## Estado del extractor
 - 439 candidatos en el documento.
-- 18 candidatos sin tarifa.
+- 17 candidatos sin tarifa después de la normalización; antes eran 18.
 - Página PDF 9: 35 registros de referencia, 31 coincidencias,
   0 falsos positivos y 4 falsos negativos.
 - Precisión: 100 %. Recall: 88,57 %. F1: 93,94 %.
@@ -33,6 +33,17 @@
 - No se utiliza OCR.
 
 ## Pendientes
-- Diagnosticar los otros 14 candidatos sin tarifa.
+- Revisar visualmente los otros 13 casos sin tarifa fuera de la página 9.
 - Evaluar las descripciones vacías, recortadas o con errores de texto.
 - Registrar al revisor humano de la referencia.
+
+
+## Normalización comprobada
+- Página PDF 11, código municipal 311, CIIU 3812.
+- La captura confirma una tarifa de 10 por mil.
+- El texto nativo recupera la tarifa como "lo".
+- Se normaliza "lo" a "10" únicamente en la columna de tarifa.
+- Se conserva el texto original en evidencia y se marca tarifa_normalizada.
+- La ejecución sobre el documento afectó únicamente este registro.
+- Se mantienen 439 candidatos y quedan 17 sin tarifa.
+- La evaluación de la página 9 conserva sus resultados anteriores.

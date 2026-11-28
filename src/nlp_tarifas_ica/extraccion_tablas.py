@@ -44,12 +44,17 @@ def extraer_tabla_guayabetal(ruta_pdf: str | Path) -> list[dict]:
                 if len(ciiu) != 1:
                     continue
 
-                tarifas = [
-                    palabra["text"]
-                    for palabra in fila
-                    if 495 <= palabra["x0"] < 550
-                    and re.fullmatch(r"\d+(?:[.,]\d+)?", palabra["text"])
-                ]
+                tarifas = []
+                tarifa_normalizada = False
+                for palabra in fila:
+                    if not 495 <= palabra["x0"] < 550:
+                        continue
+                    valor = palabra["text"]
+                    if valor == "lo":
+                        valor = "10"
+                        tarifa_normalizada = True
+                    if re.fullmatch(r"\d+(?:[.,]\d+)?", valor):
+                        tarifas.append(valor)
 
                 descripcion = " ".join(
                     palabra["text"]
@@ -63,6 +68,7 @@ def extraer_tabla_guayabetal(ruta_pdf: str | Path) -> list[dict]:
                     "codigo_actividad": inicio["text"],
                     "ciiu": ciiu[0],
                     "descripcion_parcial": descripcion,
+                    "tarifa_normalizada": tarifa_normalizada,
                     "tarifa_candidata": (
                         tarifas[0] if len(tarifas) == 1 else None
                     ),
