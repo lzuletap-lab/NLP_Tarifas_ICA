@@ -43,3 +43,19 @@ Se comparan código, tarifa y unidad; las descripciones no se evalúan.
 - Confirmar en la página siguiente que el intervalo de tablas termina en la 54.
 - Integrar la ejecución por lote y la evaluación en un script o notebook.
 - Los archivos de data/processed son locales y están excluidos de Git.
+
+## Ejecución reproducible
+Desde la raíz del proyecto:
+
+```bash
+poetry run python scripts/extraer_san_vicente.py
+
+
+```
+
+Requiere el PDF de San Vicente Ferrer en data/raw/.
+Genera el CSV, el JSON de candidatos y un resumen por página en
+data/processed/. Las salidas mantienen el estado pendiente_revision.
+
+Se comprobó visualmente que la página PDF 55 contiene artículos
+y no continúa la tabla anterior. El intervalo procesado es 38–54.
