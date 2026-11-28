@@ -34,7 +34,14 @@ def extraer_tabla_san_francisco(
             pagina = pdf.pages[numero - 1]
             actual = None
 
-            for linea in (pagina.extract_text() or "").splitlines():
+            texto_pagina = pagina.extract_text() or ""
+            texto_tabla = re.split(
+                r"(?im)^\s*PAR[ÁA]\s*GRA",
+                texto_pagina,
+                maxsplit=1,
+            )[0]
+
+            for linea in texto_tabla.splitlines():
                 limpia = linea.strip()
                 titulo = re.sub(r"[^A-Z]", "", limpia.upper())
 
@@ -80,6 +87,70 @@ def extraer_tabla_san_francisco(
 
             if actual:
                 registros.append(actual)
+
+            # Respaldo por columnas para tarifas desordenadas.
+            # Coordenadas específicas del formato de San Francisco.
+            pendientes = [
+                r for r in registros
+                if r["pagina"] == numero
+                and r["tarifa_candidata"] is None
+            ]
+            if pendientes:
+                palabras = pagina.extract_words()
+                parrafos = [
+                    p["top"] for p in palabras
+                    if re.match(r"PAR[ÁA]GRA", p["text"], re.I)
+                ]
+                limite = min(parrafos) if parrafos else pagina.height - 35
+
+                for registro in pendientes:
+                    anclas = [
+                        p for p in palabras
+                        if p["text"] == registro["codigo_fuente"]
+                        and p["x0"] < 125
+                        and p["top"] < limite
+                    ]
+                    if len(anclas) != 1:
+                        continue
+
+                    ancla = anclas[0]
+                    siguientes = [
+                        p["top"] for p in palabras
+                        if p["x0"] < 125
+                        and re.fullmatch(r"\d{3}", p["text"])
+                        and p["top"] > ancla["top"] + 5
+                        and p["top"] < limite
+                    ]
+                    fin = min(siguientes + [limite])
+                    arriba = max(0, ancla["top"] - 5)
+
+                    tasa_palabras = sorted(
+                        [
+                            p for p in palabras
+                            if p["x0"] >= 430
+                            and arriba <= p["top"] < fin - 3
+                        ],
+                        key=lambda p: p["x0"],
+                    )
+                    tasa_texto = " ".join(p["text"] for p in tasa_palabras)
+                    tasa = re.fullmatch(
+                        r"(\d+(?:[.,]\d+)?)\s*[xX×]\s*[1lI]000",
+                        tasa_texto,
+                    )
+                    descripcion = pagina.crop(
+                        (125, arriba, 430, fin - 3)
+                    ).extract_text() or ""
+
+                    registro["descripcion"] = " ".join(descripcion.split())
+                    registro["tarifa_candidata"] = (
+                        tasa.group(1) if tasa else None
+                    )
+                    registro["unidad_candidata"] = (
+                        "por_mil" if tasa else None
+                    )
+                    registro["evidencia"] = (
+                        descripcion + "\nTarifa fuente: " + tasa_texto
+                    )
 
             pagina.close()
 
