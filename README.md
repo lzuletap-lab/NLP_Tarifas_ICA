@@ -3,8 +3,10 @@
 Proyecto académico para extraer candidatos de actividades económicas,
 códigos CIIU y tarifas ICA desde archivos PDF con texto extraíble.
 
-El flujo actual no utiliza OCR. El extractor de tablas está configurado
-para el formato del documento de Guayabetal.
+El flujo actual no utiliza OCR. Incluye extractores específicos para
+Guayabetal, San Vicente Ferrer, San Francisco y Santa Fe de Antioquia.
+Las tablas de Medellín permanecen pendientes de extracción.
+Los resultados son candidatos pendientes de revisión.
 
 ## Requisitos
 
@@ -34,7 +36,11 @@ Las dependencias se gestionan mediante `pyproject.toml` y `poetry.lock`.
 | `src/nlp_tarifas_ica/lectura_pdf.py` | Lectura de texto por página |
 | `src/nlp_tarifas_ica/normalizacion.py` | Normalización de espacios y saltos de línea |
 | `src/nlp_tarifas_ica/segmentacion.py` | Segmentación por encabezados de artículos |
-| `src/nlp_tarifas_ica/extraccion_tablas.py` | Extracción de candidatos del formato Guayabetal |
+| `src/nlp_tarifas_ica/extraccion_tablas.py` | Extractores de Guayabetal y San Vicente Ferrer |
+| `src/nlp_tarifas_ica/extraccion_san_francisco.py` | Extractor de San Francisco |
+| `src/nlp_tarifas_ica/extraccion_santa_fe.py` | Extractor de Santa Fe de Antioquia |
+| `scripts/` | Ejecución por lote y evaluación |
+| `docs/estado_validacion_pdfs.md` | Estado consolidado de validación |
 | `src/nlp_tarifas_ica/exportacion.py` | Exportación a CSV y JSON |
 | `src/nlp_tarifas_ica/validacion.py` | Comparación con una referencia transcrita |
 | `notebooks/01_flujo_principal.ipynb` | Ejecución del flujo y evaluación |
@@ -108,17 +114,77 @@ Esta página ya se utilizó para diagnosticar el extractor y constituye
 una muestra de desarrollo. Los resultados no representan una prueba
 independiente ni permiten generalizar a otros documentos.
 
+## Ejecución por lote y evaluación consolidada
+
+Desde la raíz del proyecto, con los PDF disponibles en data/raw/:
+
+    poetry run python scripts/extraer_san_vicente.py
+    poetry run python scripts/extraer_san_francisco.py
+    poetry run python scripts/extraer_santa_fe.py
+    poetry run python scripts/evaluar_extractores.py
+
+La evaluación consolidada ejecuta los cuatro extractores automáticos,
+incluido Guayabetal. Los nombres de los PDF deben coincidir con los
+registrados en los CSV de referencia.
+
+Genera data/processed/evaluacion_extractores.json.
+
+### Resultados reproducibles
+
+| Documento | Candidatos | Sin tarifa | Descripciones vacías | Páginas evaluadas | VP / FP / FN | F1 |
+|---|---:|---:|---:|---|---|---:|
+| Guayabetal | 439 | 17 | 70 | 9 | 31 / 0 / 4 | 93,94 % |
+| San Vicente Ferrer | 468 | 0 | 0 | 38, 39 y 42 | 88 / 0 / 0 | 100 % |
+| San Francisco | 45 | 0 | 0 | 46–49 | 45 / 0 / 0 | 100 % |
+| Santa Fe de Antioquia | 468 | 0 | 0 | 29 y 30 | 49 / 0 / 0 | 100 % |
+
+Los conteos corresponden al lote completo. Las métricas evalúan códigos,
+tarifa y unidad exclusivamente en las páginas indicadas.
+No se detectaron códigos duplicados dentro de una misma página.
+
+Los controles adicionales de San Vicente p54 y Santa Fe p44 quedan
+separados: sus referencias aún no están guardadas en CSV.
+Las métricas son provisionales y las referencias requieren revisión
+humana registrada. No constituyen una prueba independiente.
+
+### Enriquecimiento de Guayabetal
+
+    poetry run python scripts/enriquecer_guayabetal.py
+
+Genera data/processed/guayabetal_enriquecido.csv y .json.
+Conserva los valores automáticos originales y añade 17 tarifas propuestas
+mediante transcripciones visuales, con su procedencia.
+No quedan tarifas propuestas vacías; las 17 tarifas automáticas
+ausentes permanecen identificables.
+
+Las propuestas transcritas no son predicciones automáticas.
+No evaluar esta salida contra las referencias usadas para completarla.
+La revisión humana sigue pendiente.
+
+### Experimentos de descripciones
+
+    poetry run python scripts/evaluar_descripciones_guayabetal.py
+
+Compara el extractor actual con el método experimental por bloques
+sobre ocho descripciones seleccionadas.
+Los métodos por bloques y por centros permanecen experimentales
+y no sustituyen al extractor principal.
+
+Consultar docs/diagnostico_guayabetal.md para los resultados y límites.
+
 ## Limitaciones y trabajo pendiente
 
-- Se procesa únicamente texto extraíble de PDF, sin OCR.
-- Las páginas sin texto no pueden procesarse mediante este flujo.
-- Las posiciones de las columnas están configuradas para Guayabetal.
-- Algunas descripciones quedan incompletas o vacías.
-- Algunas tarifas no se recuperan.
-- Los 439 candidatos obtenidos del documento completo no constituyen
-  una medida de precisión ni de cobertura.
-- Falta completar y registrar la revisión humana de la referencia.
-- Se requiere ampliar la referencia a páginas y documentos independientes.
-- Falta evaluar otros formatos y la calidad de las descripciones.
-- Las métricas anteriores evalúan extracción; no validan los
-  clasificadores exploratorios de los notebooks originales.
+- Se utiliza texto nativo, sin OCR. Su presencia no garantiza que
+  todas las filas, tarifas o descripciones sean recuperables.
+- Los extractores están adaptados a formatos concretos.
+- Guayabetal conserva 17 tarifas automáticas ausentes y
+  70 descripciones vacías, además de textos parciales y errores de caracteres.
+- La presencia o longitud de una descripción no demuestra integridad.
+- Las descripciones solo tienen evaluaciones sobre muestras seleccionadas.
+- Medellín permanece pendiente de extracción de tablas y sin métricas.
+- Falta completar y registrar la revisión humana de las referencias.
+- Se requiere ampliar la evaluación a páginas y documentos independientes.
+- Las métricas de extracción no validan los clasificadores exploratorios.
+- Los candidatos y las propuestas enriquecidas no son datos aprobados.
+
+Consultar docs/estado_validacion_pdfs.md para el alcance de cada documento.
