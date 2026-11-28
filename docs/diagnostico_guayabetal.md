@@ -124,3 +124,17 @@ Comando:
 - Estos resultados miden cobertura y alertas, no exactitud.
 - No se sustituyeron descripciones del extractor principal.
 - Detalle local: data/processed/diagnostico_descripciones_lote.json.
+
+
+## Comparación del método por bloques y por centros
+- Comparación sobre los mismos ocho casos de desarrollo.
+- Bloques: 7/8 coincidencias exactas y 8/8 sin distinguir mayúsculas.
+- Centros: 7/8 exactas, 7/8 sin distinguir mayúsculas y una abstención.
+- La abstención corresponde a página PDF 8, CIIU 4741.
+- Bloques recupera ese texto con una diferencia de mayúscula.
+- En controles adicionales, centros recupera el texto completo del
+  CIIU 2022, pero devuelve una descripción recortada para el 8720.
+- Un desajuste pequeño del centro no garantiza integridad.
+- Ambos métodos permanecen experimentales.
+- No se modifica el extractor principal ni sus tarifas.
+- Resultados de desarrollo; referencias pendientes de revisión humana.
