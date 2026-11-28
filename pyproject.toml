@@ -30,8 +30,4 @@ dev = [
 ]
 
 [tool.poetry]
-name = "nlp-tarifas-ica"
-version = "0.1.0"
-description = "Extraccion de tarifas ICA por codigo CIIU"
-authors = ["Equipo NLP <equipo@example.com>"]
 packages = [{ include = "nlp_tarifas_ica", from = "src" }]
