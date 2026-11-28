@@ -98,3 +98,17 @@ Ejecución desde la raíz del proyecto:
 - La muestra difiere de la evaluación anterior de ocho descripciones;
   sus porcentajes no se comparan directamente.
 - Los reportes JSON se guardaron localmente en data/processed/.
+
+## Comparación reproducible sobre los mismos ocho casos
+Comando:
+
+    poetry run python scripts/evaluar_descripciones_guayabetal.py
+
+- Método actual: 5/8 coincidencias exactas y 5/8 sin distinguir mayúsculas.
+- Método experimental: 7/8 exactas y 8/8 sin distinguir mayúsculas.
+- Se incluyen todos los casos de la muestra en ambos métodos.
+- sin_propuesta cuenta valores None; no cuenta cadenas vacías.
+- No se modifican los candidatos ni las tarifas.
+- Muestra seleccionada y referencias pendientes de revisión humana.
+- El caso 2022 no pertenece a estos ocho y mantiene un recorte conocido.
+- El método experimental aún no sustituye al extractor principal.
