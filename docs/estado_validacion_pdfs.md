@@ -56,3 +56,28 @@ Guayabetal genera una salida enriquecida separada de la extracción automática.
 - Los colaboradores deben disponer de los PDF para reproducir las ejecuciones.
 - Los cambios están en feature/estructura-poetry; no se confirma su integración
   en develop o main.
+
+
+## Evaluación consolidada reproducible
+Desde la raíz del proyecto:
+
+    poetry run python scripts/evaluar_extractores.py
+
+Genera data/processed/evaluacion_extractores.json.
+Utiliza las salidas automáticas originales de los cuatro extractores.
+
+| Documento | Candidatos | Sin tarifa | Descripciones vacías | VP | FP | FN |
+|---|---:|---:|---:|---:|---:|---:|
+| Guayabetal | 439 | 17 | 70 | 31 | 0 | 4 |
+| San Vicente Ferrer | 468 | 0 | 0 | 88 | 0 | 0 |
+| San Francisco | 45 | 0 | 0 | 45 | 0 | 0 |
+| Santa Fe de Antioquia | 468 | 0 | 0 | 49 | 0 | 0 |
+
+- No se detectaron códigos duplicados dentro de una misma página.
+- Las métricas evalúan códigos, tarifa y unidad en páginas con referencia.
+- Las descripciones solo se comprueban por presencia de texto.
+- Los controles de San Vicente p54 y Santa Fe p44 quedan separados;
+  sus referencias aún no están guardadas en CSV.
+- No se evalúan las salidas enriquecidas con transcripciones.
+- Medellín sigue pendiente de extracción.
+- Métricas provisionales, con revisión humana de referencias pendiente.
