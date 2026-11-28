@@ -64,3 +64,21 @@ Ejecución desde la raíz del proyecto:
 - No evaluar esta salida contra las referencias usadas para completarla.
 - La evaluación automática de la página 9 conserva 31 coincidencias
   y 4 falsos negativos.
+
+## Evaluación parcial de descripciones
+- Se evaluó la extracción automática, sin usar la salida enriquecida.
+- Referencias: ocho descripciones de las revisiones parciales de
+  páginas 5, 6, 7, 8 y 15.
+- Comparación exacta normalizando únicamente espacios y Unicode NFC.
+- Cinco coincidencias: CIIU 2640, 2910, 3011, 3012 y 6630.
+- Dos descripciones vacías: CIIU 2399 y 4741.
+- Una descripción recortada: CIIU 4723.
+- Coincidencia exacta: 5/8 (62,5 %).
+- La muestra se seleccionó por problemas de extracción; el porcentaje
+  no representa la exactitud de las 439 descripciones.
+- Las referencias siguen pendientes de revisión humana registrada.
+
+## Pruebas de delimitación
+- Las franjas calculadas entre códigos mezclaron texto de filas vecinas.
+- La agrupación por espacios entre líneas produjo bloques ambiguos.
+- Ninguna de estas dos reglas se incorporó al extractor.
