@@ -75,3 +75,66 @@ def extraer_tabla_guayabetal(ruta_pdf: str | Path) -> list[dict]:
             pagina.close()
 
     return registros
+
+
+def extraer_tabla_san_vicente(
+    ruta_pdf: str | Path,
+    paginas: list[int],
+) -> list[dict]:
+    """Extrae tablas de tres columnas en páginas PDF indicadas.
+
+    Las páginas se numeran desde 1.
+    Requiere comprobar en el PDF que la unidad es por mil.
+    Conserva el código tal como aparece en la fuente.
+    """
+    if not paginas:
+        raise ValueError("Debe indicar las páginas que desea procesar.")
+
+    ruta = Path(ruta_pdf)
+    registros = []
+
+    with pdfplumber.open(ruta) as pdf:
+        numeros = sorted(set(paginas))
+        if any(n < 1 or n > len(pdf.pages) for n in numeros):
+            raise ValueError("Hay páginas fuera del documento.")
+
+        for numero in numeros:
+            pagina = pdf.pages[numero - 1]
+
+            for tabla in pagina.extract_tables():
+                for fila in tabla:
+                    if len(fila) != 3:
+                        continue
+
+                    codigo, descripcion, tarifa = [
+                        str(celda or "").strip()
+                        for celda in fila
+                    ]
+
+                    if not re.fullmatch(r"\d{3,4}", codigo):
+                        continue
+
+                    tarifa_valida = bool(
+                        re.fullmatch(r"\d+(?:[.,]\d+)?", tarifa)
+                    )
+
+                    registros.append({
+                        "archivo": ruta.name,
+                        "municipio": "San Vicente Ferrer",
+                        "pagina": numero,
+                        "codigo_fuente": codigo,
+                        "descripcion": " ".join(descripcion.split()),
+                        "tarifa_candidata": (
+                            tarifa if tarifa_valida else None
+                        ),
+                        "unidad_candidata": "por_mil",
+                        "evidencia": " | ".join(
+                            str(celda or "") for celda in fila
+                        ),
+                        "estado": "pendiente_revision",
+                        "requiere_revision": True,
+                    })
+
+            pagina.close()
+
+    return registros

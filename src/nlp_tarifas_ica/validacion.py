@@ -8,6 +8,7 @@ def evaluar_extraccion(
     referencia: list[dict],
     candidatos: list[dict],
     paginas_evaluadas: list[tuple[str, int]],
+    campos_codigo: tuple[str, ...] = ("codigo_actividad", "ciiu"),
 ) -> dict:
     """Compara códigos, tarifa y unidad con coincidencia exacta.
 
@@ -38,8 +39,7 @@ def evaluar_extraccion(
         return (
             registro["archivo"],
             int(registro["pagina"]),
-            str(registro["codigo_actividad"]).strip(),
-            str(registro["ciiu"]).strip(),
+            *(str(registro[campo]).strip() for campo in campos_codigo),
             tarifa,
             registro[campo_unidad],
         )
