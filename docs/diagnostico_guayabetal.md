@@ -47,3 +47,20 @@
 - La ejecución sobre el documento afectó únicamente este registro.
 - Se mantienen 439 candidatos y quedan 17 sin tarifa.
 - La evaluación de la página 9 conserva sus resultados anteriores.
+
+## Salida enriquecida con transcripciones
+Ejecución desde la raíz del proyecto:
+
+    poetry run python scripts/enriquecer_guayabetal.py
+
+- Genera data/processed/guayabetal_enriquecido.csv y .json.
+- Conserva los 439 candidatos y sus valores automáticos originales.
+- Completa 17 tarifas propuestas mediante transcripciones visuales.
+- No quedan tarifas propuestas vacías.
+- Registra el origen de cada tarifa propuesta y el archivo de transcripción.
+- Mantiene las descripciones transcritas en un campo separado cuando existen.
+- El revisor humano de las transcripciones sigue pendiente.
+- Las propuestas transcritas no son predicciones automáticas.
+- No evaluar esta salida contra las referencias usadas para completarla.
+- La evaluación automática de la página 9 conserva 31 coincidencias
+  y 4 falsos negativos.
