@@ -59,3 +59,16 @@ data/processed/. Las salidas mantienen el estado pendiente_revision.
 
 Se comprobó visualmente que la página PDF 55 contiene artículos
 y no continúa la tabla anterior. El intervalo procesado es 38–54.
+
+## Revisión puntual de descripciones
+Se contrastaron visualmente con las capturas del PDF cinco descripciones
+que ocupan varias líneas:
+- Página 38, código 130.
+- Página 39, código 1020.
+- Página 42, códigos 2817 y 2825.
+- Página 54, código 6619.
+
+Las cinco descripciones extraídas coinciden con el texto visible completo,
+normalizando los saltos de línea como espacios.
+Esta revisión puntual no permite estimar la exactitud de las 468 descripciones.
+Queda pendiente registrar al revisor humano y ampliar la muestra.
