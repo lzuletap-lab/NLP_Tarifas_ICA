@@ -32,6 +32,19 @@ Se comparan código, tarifa y unidad; las descripciones no tienen evaluación co
 - Registrar al revisor humano de las referencias.
 - Guardar la referencia de la página 44 y automatizar las comprobaciones.
 - Evaluar descripciones y ampliar la muestra de validación.
-- Guardar un script de ejecución reproducible del lote.
+- Ampliar la evaluación automática más allá de las páginas 29 y 30.
 - Tratar por separado las tablas de UVT y Régimen Simple.
 - Los archivos de data/processed están excluidos de Git.
+
+
+## Ejecución reproducible
+Desde la raíz del proyecto:
+
+    poetry run python scripts/extraer_santa_fe.py
+
+Requiere el PDF en data/raw/ y las referencias en data/referencia/.
+Extrae las páginas PDF 29–44 y genera CSV, JSON y resumen del lote.
+Evalúa automáticamente solo las páginas 29 y 30.
+Las salidas se guardan en data/processed/.
+Los candidatos conservan el estado pendiente_revision.
+Las descripciones no se evalúan.
