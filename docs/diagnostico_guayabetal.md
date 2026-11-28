@@ -82,3 +82,19 @@ Ejecución desde la raíz del proyecto:
 - Las franjas calculadas entre códigos mezclaron texto de filas vecinas.
 - La agrupación por espacios entre líneas produjo bloques ambiguos.
 - Ninguna de estas dos reglas se incorporó al extractor.
+
+## Experimento de propuestas por bloques
+- Módulo: src/nlp_tarifas_ica/descripciones_guayabetal.py.
+- Función: proponer_descripcion(pagina, ciiu).
+- No modifica las descripciones ni las tarifas del extractor principal.
+- Prueba en seis casos seleccionados: páginas 3, 5, 7, 8, 10 y 12.
+- Coincidencias exactas: 3/6.
+- Coincidencias sin distinguir mayúsculas: 5/6.
+- CIIU 2022 mantiene una descripción recortada.
+- CIIU 4741 y 8720 presentan diferencias de mayúsculas.
+- Todas las propuestas requieren revisión; un bloque único no garantiza
+  que la descripción esté completa.
+- Resultados exploratorios sobre casos seleccionados, sin alcance global.
+- La muestra difiere de la evaluación anterior de ocho descripciones;
+  sus porcentajes no se comparan directamente.
+- Los reportes JSON se guardaron localmente en data/processed/.
